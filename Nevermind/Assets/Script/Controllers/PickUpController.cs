@@ -5,14 +5,14 @@ using UnityEngine;
 [RequireComponent(typeof(Inventory))]
 public class PickUpController : MonoBehaviour
 {
-	Inventory inventory;
+	Bag inventory;
 
 	public LayerMask layerMask;
 	public float hitRange = 100f;
 
 	private void Awake()
 	{
-		inventory = GetComponent<Inventory>();
+		inventory = GetComponent<Bag>();
 	}
 
 	private void Update()

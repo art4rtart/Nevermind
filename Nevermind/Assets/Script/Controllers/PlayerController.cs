@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
 	private void Awake()
 	{
 		animator = GetComponentInChildren<Animator>();
-		Debug.Log(animator);
 		cameraController = GameObject.FindObjectOfType<CameraController>();
 	}
 

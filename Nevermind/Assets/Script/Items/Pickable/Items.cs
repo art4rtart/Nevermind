@@ -5,7 +5,6 @@ using static Define;
 
 public class Items : Pickable
 {
-
 	public override void Init()
 	{
 		base.Init();

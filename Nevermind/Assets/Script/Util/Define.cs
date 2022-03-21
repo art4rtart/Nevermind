@@ -13,6 +13,13 @@ public class Define
         Item
     }
 
+    public enum PickableState
+    {
+        Ground,
+        Bag,
+        Pocket
+    }
+
     public enum Scene
     {
         Unknown,

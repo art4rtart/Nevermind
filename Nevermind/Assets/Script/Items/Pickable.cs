@@ -7,6 +7,8 @@ public abstract class Pickable : MonoBehaviour
 {
 	[SerializeField] protected PickableType pickableType;
 	[SerializeField] protected new string name;
+
+	public Sprite Sprite { get { return sprtie; } }
 	[SerializeField] protected Sprite sprtie;
 
 	public int Amount { get { return amount; } set { amount = value; } }
@@ -20,10 +22,22 @@ public abstract class Pickable : MonoBehaviour
 	public int SpacePerAmount { get { return spacePerAmount; } set { } }
 	[SerializeField] protected int spacePerAmount;
 
+	[SerializeField] protected PickableState pickableState;
+	public Vector2 Matrix { get { return matrix; } set { matrix = value; } }
+	[SerializeField] protected Vector2 matrix;
+
 	public abstract void Get();
 	public abstract void Drop();
 	public abstract void Use();
 	public abstract void Sell();
+
+	// please remind this methods...
+	public virtual void InitMatrix() { }
+
+	public virtual void SetMatrix(int x, int y) 
+	{
+		matrix = new Vector2Int(x, y);
+	}
 
 	private void Awake()
 	{
