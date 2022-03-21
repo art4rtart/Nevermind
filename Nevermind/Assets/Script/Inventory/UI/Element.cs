@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using static Define;
 
 public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 {
-	public Pickable pickable;
-	Image image;
+	Pickable pickable;
 
-	public Image viewport;
-	Slot slot;
+	public Slot slot;
+
+	Image image;
+	Image viewport;
 
 	Transform parent;
-	Transform dragElement;
+	public Transform dragElement;
 
 	Vector3 clickPosition;
 	Vector3 targetPosition;
@@ -22,6 +24,8 @@ public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 	bool isDropable;
 
 	private const int SLOTSIZE = 64;
+
+	public Vector2 current;
 
 	private void Awake()
 	{
@@ -38,9 +42,14 @@ public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 		pickable = _pickable;
 	}
 
-	public Vector2 SizeAmount()
+	public Vector2 Matrix()
 	{
 		return pickable.Matrix;
+	}
+
+	public void SetCurrentIndex(Vector2 _index)
+	{
+		current = _index;
 	}
 
 	void Init()
@@ -48,7 +57,6 @@ public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 		this.gameObject.name = pickable.name;
 		image.sprite = pickable.Sprite;
 
-		dragElement = this.transform.GetChild(1).transform;
 		dragElement.transform.GetChild(0).GetComponent<Image>().sprite = pickable.Sprite;
 
 		size = pickable.Matrix * SLOTSIZE;
@@ -57,35 +65,55 @@ public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 
 		parent = InventoryUIController.Instance.pickedItemHolder;
 		viewport = InventoryUIController.Instance.viewPort;
+
+		this.GetComponent<Image>().color = Random.ColorHSV();
 	}
 
+	public void PointerEnter()
+	{
+		InventoryUIController.Instance.isDropable = false;
+	}
+
+	Vector3 startPosition;
 	public void PointerDown()
 	{
+		InventoryUIController.Instance.element = this;
+
+		startPosition = this.transform.position;
 		clickPosition = Input.mousePosition - new Vector3(Screen.width * .5f, Screen.height * .5f, 0);
 
+		this.GetComponent<Image>().raycastTarget = false;
 		dragElement.gameObject.SetActive(true);
 		dragElement.SetParent(parent);
 		dragElement.localPosition = clickPosition;
+		dragElement.GetComponent<RectTransform>().rotation = this.GetComponent<RectTransform>().rotation;
 
 		viewport.raycastTarget = false;
 
-		if (slot != null) slot.isEmpty = true;
+		InventoryUIController.Instance.inventory.EraseElement(current, pickable.Matrix);
 	}
 
 	public void PointerUp()
 	{
+		this.GetComponent<RectTransform>().eulerAngles = dragElement.GetComponent<RectTransform>().eulerAngles;
+
+		this.GetComponent<Image>().raycastTarget = true;
 		dragElement.SetParent(this.gameObject.transform);
 		dragElement.gameObject.SetActive(false);
 
-		// check if it is dropable
 		slot = InventoryUIController.Instance.slot;
-		if (slot != null) isDropable = slot.isEmpty;
+		isDropable = InventoryUIController.Instance.isDropable;
 
-		targetPosition = isDropable ? slot.transform.position : this.transform.position;
-
-		slot.isEmpty = (targetPosition == this.transform.position) ? true : false;
+		if (slot != null)
+		{
+			targetPosition = isDropable ? slot.transform.position : startPosition;
+			InventoryUIController.Instance.inventory.MoveElement(current, slot.index, pickable.Matrix);
+			current = slot.index;
+		}
+		else isDropable = false;
 
 		viewport.raycastTarget = true;
+		InventoryUIController.Instance.element = null;
 	}
 
 	public void OnDrag(PointerEventData eventData)
@@ -95,7 +123,18 @@ public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		this.transform.position = targetPosition;
+		float x = targetPosition.x + pickable.Matrix.x * SLOTSIZE * .5f;
+		float y = targetPosition.y - pickable.Matrix.y * SLOTSIZE * .5f + SLOTSIZE;
+
+		this.transform.position = isDropable ? new Vector3(x, y, 0) : startPosition;
+
 		dragElement.transform.localPosition = Vector3.zero;
+	}
+
+	public void RotateElement()
+	{
+		dragElement.GetComponent<RectTransform>().eulerAngles -= Vector3.forward * 90f;
+		pickable.RotateMatrix();
+		current = pickable.Matrix;
 	}
 }

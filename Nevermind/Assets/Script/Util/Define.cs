@@ -20,6 +20,13 @@ public class Define
         Pocket
     }
 
+    public enum PickableMatrix
+    {
+        Square,
+        Horizontal,
+        Vertical
+    }
+
     public enum Scene
     {
         Unknown,

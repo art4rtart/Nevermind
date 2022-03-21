@@ -12,8 +12,7 @@ public class Slot : MonoBehaviour
 	public Color emptyColor;
 	public Color notEmptyColor;
 
-	Vector3 pivot;
-	bool update;
+	public Vector2 index;
 
 	private void Awake()
 	{
@@ -21,22 +20,15 @@ public class Slot : MonoBehaviour
 		defaultColor = image.color;
 	}
 
-	private void Start()
-	{
-		Vector2 size = this.GetComponent<RectTransform>().sizeDelta * .5f;
-		pivot = this.transform.position + new Vector3(size.x, size.y, 0);
-	}
-
-	private void Update()
-	{
-		if (!update) return;
-	}
-
 	public void HoverEnter()
 	{
 		image.color = emptyColor;
 		InventoryUIController.Instance.slot = this;
-		update = true;
+
+		if (InventoryUIController.Instance.slot == null)
+		{
+			InventoryUIController.Instance.CheckDropable();
+		}
 	}
 
 	public void HoverClick()
@@ -48,7 +40,12 @@ public class Slot : MonoBehaviour
 	{
 		image.color = defaultColor;
 
-		InventoryUIController.Instance.slot = this;
-		update = false;
+		InventoryUIController.Instance.slot = null;
+	}
+
+	public void SetImageColor(bool _hover)
+	{
+		if (_hover) image.color = emptyColor;
+		else image.color = defaultColor;
 	}
 }

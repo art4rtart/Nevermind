@@ -26,6 +26,9 @@ public abstract class Pickable : MonoBehaviour
 	public Vector2 Matrix { get { return matrix; } set { matrix = value; } }
 	[SerializeField] protected Vector2 matrix;
 
+	public PickableMatrix PickableMatrix { get { return pickableMatrix; } }
+	[SerializeField] protected PickableMatrix pickableMatrix;
+
 	public abstract void Get();
 	public abstract void Drop();
 	public abstract void Use();
@@ -37,6 +40,31 @@ public abstract class Pickable : MonoBehaviour
 	public virtual void SetMatrix(int x, int y) 
 	{
 		matrix = new Vector2Int(x, y);
+
+		if(x == y)
+		{
+			pickableMatrix = PickableMatrix.Square;
+		}
+		else if (x < y)
+		{
+			pickableMatrix = PickableMatrix.Vertical;
+		}
+		else if (x > y)
+		{
+			pickableMatrix = PickableMatrix.Horizontal;
+		}
+	}
+
+	public void RotateMatrix()
+	{
+		int value;
+
+		value = (int)matrix.x;
+		matrix.x = matrix.y;
+		matrix.y = value;
+
+		if (matrix.x - matrix.y < 0) pickableMatrix = PickableMatrix.Vertical;
+		else if (matrix.x - matrix.y > 0) pickableMatrix = PickableMatrix.Horizontal;
 	}
 
 	private void Awake()
@@ -49,6 +77,8 @@ public abstract class Pickable : MonoBehaviour
 		this.gameObject.name = name;
 		this.gameObject.layer = LayerMask.NameToLayer("Item");
 		this.gameObject.tag = "Item";
+
+		SetMatrix((int)matrix.x, (int)matrix.y);
 	}
 
 	public int SpaceAmount()

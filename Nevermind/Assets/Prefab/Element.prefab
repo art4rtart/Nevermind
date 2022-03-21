@@ -270,7 +270,7 @@ RectTransform:
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 64, y: 64}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8382368941685432719
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -321,8 +321,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47697cb7537e144691525a67a5105c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickable: {fileID: 0}
-  viewport: {fileID: 0}
+  slot: {fileID: 0}
+  dragElement: {fileID: 1273574196}
+  current: {x: 0, y: 0}
 --- !u!114 &1772221312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359,6 +360,22 @@ MonoBehaviour:
         - m_Target: {fileID: -4042228293697101550}
           m_TargetAssemblyTypeName: Element, Assembly-CSharp
           m_MethodName: PointerUp
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: -4042228293697101550}
+          m_TargetAssemblyTypeName: Element, Assembly-CSharp
+          m_MethodName: HoverEnter
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

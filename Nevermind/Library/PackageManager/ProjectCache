@@ -2988,6 +2988,7 @@ m_ResolvedPackages:
     - 1.2.0-exp.3
     - 1.2.0-exp.4
     - 1.2.0-exp.5
+    - 1.2.0-exp.6
     compatible:
     - 1.0.1
     - 1.1.0
@@ -2997,6 +2998,7 @@ m_ResolvedPackages:
     - 1.2.0-exp.3
     - 1.2.0-exp.4
     - 1.2.0-exp.5
+    - 1.2.0-exp.6
     verified: 1.0.1
   dependencies:
   - name: com.unity.test-framework

@@ -166,7 +166,8 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 1, y: 1}
+  matrix: {x: 3, y: 2}
+  pickableMatrix: 0
 --- !u!54 &3324282
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1769,7 +1770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4883,7 +4884,8 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 1, y: 1}
+  matrix: {x: 3, y: 2}
+  pickableMatrix: 0
 --- !u!54 &564277673
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5184,6 +5186,9 @@ MonoBehaviour:
   pickedItemHolder: {fileID: 732804180}
   viewPort: {fileID: 0}
   slot: {fileID: 0}
+  element: {fileID: 0}
+  isDropable: 0
+  inventory: {fileID: 0}
 --- !u!1001 &601411497
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5793,7 +5798,8 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 1, y: 2}
+  matrix: {x: 2, y: 2}
+  pickableMatrix: 0
 --- !u!54 &680722236
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5893,7 +5899,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 680722234}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.5, y: 0.5, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7203,7 +7209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -8825,7 +8831,8 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 2, y: 2}
+  matrix: {x: 3, y: 2}
+  pickableMatrix: 0
 --- !u!54 &1028736874
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8925,7 +8932,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1028736872}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.5, y: 0.5, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -11226,7 +11233,8 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 2, y: 2}
+  matrix: {x: 4, y: 1}
+  pickableMatrix: 0
 --- !u!65 &1280577265
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11938,24 +11946,9 @@ MonoBehaviour:
   - {fileID: 1439726641}
   - {fileID: 680722235}
   - {fileID: 1028736873}
-  - {fileID: 564277672}
-  - {fileID: 3324281}
-  - {fileID: 1280577264}
-  - {fileID: 1850602431}
-  - {fileID: 1879044927}
-  - {fileID: 1439726641}
-  - {fileID: 680722235}
-  - {fileID: 1028736873}
-  - {fileID: 564277672}
-  - {fileID: 3324281}
-  - {fileID: 1280577264}
-  - {fileID: 1850602431}
-  - {fileID: 1879044927}
-  - {fileID: 1439726641}
-  - {fileID: 680722235}
-  - {fileID: 1028736873}
-  - {fileID: 564277672}
-  - {fileID: 3324281}
+  slot: {fileID: 1568290011}
+  current: []
+  elements: []
 --- !u!1001 &1431750734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12137,7 +12130,8 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 2, y: 2}
+  matrix: {x: 1, y: 4}
+  pickableMatrix: 0
 --- !u!54 &1439726642
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -12237,7 +12231,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1439726640}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.5, y: 0.5, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -16204,6 +16198,7 @@ MonoBehaviour:
   spacePerAmount: 1
   pickableState: 0
   matrix: {x: 1, y: 2}
+  pickableMatrix: 0
 --- !u!65 &1850602432
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16274,7 +16269,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1850602428}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -16492,7 +16487,8 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 2, y: 2}
+  matrix: {x: 1, y: 3}
+  pickableMatrix: 0
 --- !u!65 &1879044928
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16563,7 +16559,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1879044924}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.5, y: 0.5, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

@@ -9,15 +9,20 @@ public class Ground : Inventory
 	public Transform content;
 	public GameObject elementPrefab;  
 	
-	Vector3 currentPosition;
 	Vector3 startPosition;
-	Vector2Int emptyIndex;
 
 	public List<Pickable> ground = new();
 
+	public Transform slot;
+	List<Slot> slots = new();
+	int slotIndex = 0;
+
+	public List<Vector2> current = new();
+	public List<Element> elements = new();
+
 	private void Start()
 	{
-		Init();
+		SetSlot();
 		ShowElement();
 	}
 
@@ -41,12 +46,20 @@ public class Ground : Inventory
 			GameObject gameObject = Instantiate(elementPrefab, transform.position, Quaternion.identity);
 			RectTransform rect = gameObject.GetComponent<RectTransform>();
 			Element element = gameObject.GetComponent<Element>();
+			elements.Add(element);
 
 			gameObject.transform.SetParent(content);
 			element.Cache(ground[i]);
 
 			FindEmpty(element, Vector2Int.zero);
 			SetElementPosition(element, rect);
+		}
+
+		int index = 0;
+		foreach(Element el in elements)
+		{
+			el.SetCurrentIndex(current[index]);
+			index++;
 		}
 	}
 
@@ -74,7 +87,7 @@ public class Ground : Inventory
 		#region check collision
 		bool foundEmptySpace = true;
 
-		if (emptyIndex.x + _element.SizeAmount().x > mapSize.x)
+		if (emptyIndex.x + _element.Matrix().x > mapSize.x)
 		{
 			emptyIndex.x = 0;
 			emptyIndex.y++;
@@ -84,9 +97,9 @@ public class Ground : Inventory
 		}
 
 		// check empty space
-		for (int y = (int)emptyIndex.y; y < (int)emptyIndex.y + _element.SizeAmount().y; y++)
+		for (int y = (int)emptyIndex.y; y < (int)emptyIndex.y + _element.Matrix().y; y++)
 		{
-			for (int x = (int)emptyIndex.x; x < (int)emptyIndex.x + _element.SizeAmount().x; x++)
+			for (int x = (int)emptyIndex.x; x < (int)emptyIndex.x + _element.Matrix().x; x++)
 			{
 				if (map[y, x] != false)
 				{
@@ -100,13 +113,17 @@ public class Ground : Inventory
 		// mark empty space
 		if (foundEmptySpace)
 		{
-			for (int y = (int)emptyIndex.y; y < emptyIndex.y + _element.SizeAmount().y; y++)
+			for (int y = (int)emptyIndex.y; y < emptyIndex.y + _element.Matrix().y; y++)
 			{
-				for (int x = (int)emptyIndex.x; x < emptyIndex.x + _element.SizeAmount().x; x++)
+				for (int x = (int)emptyIndex.x; x < emptyIndex.x + _element.Matrix().x; x++)
 				{
 					map[y, x] = true;
 				}
 			}
+
+			SetElementSlot(_element);
+			
+			current.Add(emptyIndex);
 		}
 
 		else
@@ -119,23 +136,28 @@ public class Ground : Inventory
 
 	void SetElementPosition(Element _element, RectTransform _elementRect)
 	{
-		currentPosition = startPosition + new Vector3(emptyIndex.x * SLOTSIZE, -((emptyIndex.y + _element.SizeAmount().y) * SLOTSIZE), 0);
-		_elementRect.position = currentPosition;
+		float x = emptyIndex.x * SLOTSIZE + _elementRect.sizeDelta.x * .5f * _element.Matrix().x;
+		float y = -((emptyIndex.y + _element.Matrix().y) * SLOTSIZE - _elementRect.sizeDelta.y * .5f * _element.Matrix().y);
+
+		_elementRect.position = startPosition + new Vector3(x, y, 0);
 	}
 
-	void ShowMap()
+	void SetSlot()
 	{
-		string value = "\n";
-		for(int i = 0; i < 10; i++)
+		int x = 0, y = 0;
+		for (int i = 0; i < slot.childCount; i++)
 		{
-			for(int j = 0; j < mapSize.x; j++)
-			{
-				if (map[i, j] == false) value += "0 ";
-				else value += "1 ";
-			}
-			value += "\n";
+			slot.GetChild(i).GetComponent<Slot>().index = new Vector2(x, y);
+			slots.Add(slot.GetChild(i).GetComponent<Slot>());
+
+			if (x == mapSize.x - 1) y = (y + 1) % mapSize.y;
+			x = (x + 1) % mapSize.x;
 		}
-		Debug.Log(value);
 	}
 
+	void SetElementSlot(Element _element)
+	{
+		_element.slot = slots[emptyIndex.x + mapSize.x * emptyIndex.y];
+		_element.slot.isEmpty = false;
+	}
 }
