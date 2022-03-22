@@ -4,19 +4,15 @@ using UnityEngine;
 
 public abstract class Inventory : MonoBehaviour
 {
-	public Vector2Int MapSize { get { return mapSize; } }
-	[SerializeField] protected Vector2Int mapSize;
+	public Vector2Int InventorySize { get { return inventorySize; } }
+	[Header("Element")]
+	[SerializeField] protected Vector2Int inventorySize;
 
 	public bool[,]Map { get { return map; } }
 	[SerializeField] protected bool[,] map;
 	
-	public Vector2Int EmptyIndex { get { return emptyIndex; } }
-	protected Vector2Int emptyIndex;
-
-	private void Awake()
-	{
-		Init();
-	}
+	// public Vector2Int EmptyMatrix { get { return emptyMatrix; } set { emptyMatrix = value; } }
+	protected Vector2Int emptyMatrix;
 
 	protected abstract void Init();
 	protected abstract void SetMapSize();
@@ -24,7 +20,7 @@ public abstract class Inventory : MonoBehaviour
 
 	public void EraseElement(Vector2 _current, Vector2 _size)
 	{
-		if (_current.y + _size.y > mapSize.y || _current.x + _size.x > mapSize.x) return;
+		if (_current.y + _size.y > inventorySize.y || _current.x + _size.x > inventorySize.x) return;
 
 		for (int y = (int)_current.y; y < _current.y + _size.y; y++)
 		{
@@ -37,7 +33,7 @@ public abstract class Inventory : MonoBehaviour
 
 	public void MoveElement(Vector2 _current, Vector2 _target, Vector2 _size)
 	{
-		if (_target.y + _size.y > mapSize.y || _target.x + _size.x > mapSize.x) return;
+		if (_target.y + _size.y > inventorySize.y || _target.x + _size.x > inventorySize.x) return;
 
 		for (int y = (int)_target.y; y < _target.y + _size.y; y++)
 		{
@@ -46,8 +42,6 @@ public abstract class Inventory : MonoBehaviour
 				map[y, x] = true;
 			}
 		}
-
-		ShowMap();
 	}
 
 	public void ShowMap()
@@ -55,12 +49,13 @@ public abstract class Inventory : MonoBehaviour
 		string value = "\n";
 		for (int i = 0; i < 10; i++)
 		{
-			for (int j = 0; j < mapSize.x; j++)
+			for (int j = 0; j < inventorySize.x; j++)
 			{
 				if (map[i, j] == false) value += "0 ";
 				else value += "1 ";
 			}
 			value += "\n";
 		}
+		Debug.Log(value);
 	}
 }

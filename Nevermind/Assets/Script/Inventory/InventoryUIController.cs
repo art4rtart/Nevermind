@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class InventoryUIController : MonoBehaviour
 {
-    public static InventoryUIController Instance
+	#region singleton
+	public static InventoryUIController Instance
     {
         get
         {
@@ -15,14 +16,20 @@ public class InventoryUIController : MonoBehaviour
         }
     }
     private static InventoryUIController instance;
+	#endregion
 
-    [HideInInspector] public Transform pickedItemHolder;
-    [HideInInspector] public Image viewPort;
-    [HideInInspector] public Slot slot;
-    [HideInInspector] public Element element;
-    [HideInInspector] public bool isDropable;
+	[SerializeField] public Transform pickedItemHolder;
 
-    [HideInInspector] public Inventory inventory;
+    [Header("Drop")]
+    [SerializeField] public Slot slot;
+    [SerializeField] public Element element;
+    [SerializeField] public bool isDropable;
+
+    public Inventory Inventory { get { return inventory; } }
+    Inventory inventory;
+
+    public Image VeiwPort { get { return viewPort; } }
+    Image viewPort;
 
     private void Awake()
 	{
@@ -43,15 +50,15 @@ public class InventoryUIController : MonoBehaviour
 	{
         isDropable = true;
 
-        if(slot.index.y + element.Matrix().y > inventory.MapSize.y || slot.index.x + element.Matrix().x > inventory.MapSize.x)
+        if(slot.Matrix.y + element.Matrix().y > inventory.InventorySize.y || slot.Matrix.x + element.Matrix().x > inventory.InventorySize.x)
         {
             isDropable = false;
             return;
 		}
 
-        for(int y = (int)slot.index.y; y < slot.index.y + element.Matrix().y; y++)
+        for(int y = (int)slot.Matrix.y; y < slot.Matrix.y + element.Matrix().y; y++)
 		{
-            for (int x = (int)slot.index.x; x < slot.index.x + element.Matrix().x; x++)
+            for (int x = (int)slot.Matrix.x; x < slot.Matrix.x + element.Matrix().x; x++)
             {
                 if(inventory.Map[y, x] == true)
 				{

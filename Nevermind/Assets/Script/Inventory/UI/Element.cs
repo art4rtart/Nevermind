@@ -9,27 +9,30 @@ public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 {
 	Pickable pickable;
 
-	public Slot slot;
+	public Slot Slot { get { return slot; } set { slot = value; } }
+	Slot slot;
 
-	Image image;
+	Image background;
+	Image sprite;
 	Image viewport;
 
+	RectTransform rect;
 	Transform parent;
-	public Transform dragElement;
 
 	Vector3 clickPosition;
 	Vector3 targetPosition;
 	Vector2 size;
 
-	bool isDropable;
-
-	private const int SLOTSIZE = 64;
-
+	public Transform dragElement;
 	public Vector2 current;
+
+	bool dropped;
 
 	private void Awake()
 	{
-		image = this.transform.GetChild(0).GetComponent<Image>();
+		rect = this.GetComponent<RectTransform>();
+		background = this.GetComponent<Image>();
+		sprite = this.transform.GetChild(0).GetComponent<Image>();
 	}
 
 	private void Start()
@@ -44,10 +47,10 @@ public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 
 	public Vector2 Matrix()
 	{
-		return pickable.Matrix;
+		return pickable.MatrixSize;
 	}
 
-	public void SetCurrentIndex(Vector2 _index)
+	public void SetCurrentMatrix(Vector2 _index)
 	{
 		current = _index;
 	}
@@ -55,18 +58,18 @@ public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 	void Init()
 	{
 		this.gameObject.name = pickable.name;
-		image.sprite = pickable.Sprite;
+		sprite.sprite = pickable.Sprite;
 
 		dragElement.transform.GetChild(0).GetComponent<Image>().sprite = pickable.Sprite;
 
-		size = pickable.Matrix * SLOTSIZE;
-		this.transform.GetComponent<RectTransform>().sizeDelta = size;
+		size = pickable.MatrixSize * SLOTSIZE;
+		rect.sizeDelta = size;
 		dragElement.GetComponent<RectTransform>().sizeDelta = size;
 
 		parent = InventoryUIController.Instance.pickedItemHolder;
-		viewport = InventoryUIController.Instance.viewPort;
+		viewport = InventoryUIController.Instance.VeiwPort;
 
-		this.GetComponent<Image>().color = Random.ColorHSV();
+		background.color = Random.ColorHSV();
 	}
 
 	public void PointerEnter()
@@ -82,7 +85,8 @@ public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 		startPosition = this.transform.position;
 		clickPosition = Input.mousePosition - new Vector3(Screen.width * .5f, Screen.height * .5f, 0);
 
-		this.GetComponent<Image>().raycastTarget = false;
+		background.raycastTarget = false;
+
 		dragElement.gameObject.SetActive(true);
 		dragElement.SetParent(parent);
 		dragElement.localPosition = clickPosition;
@@ -90,29 +94,30 @@ public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 
 		viewport.raycastTarget = false;
 
-		InventoryUIController.Instance.inventory.EraseElement(current, pickable.Matrix);
+		InventoryUIController.Instance.Inventory.EraseElement(current, pickable.MatrixSize);
 	}
 
 	public void PointerUp()
 	{
-		this.GetComponent<RectTransform>().eulerAngles = dragElement.GetComponent<RectTransform>().eulerAngles;
+		rect.eulerAngles = dragElement.GetComponent<RectTransform>().eulerAngles;
 
-		this.GetComponent<Image>().raycastTarget = true;
+		background.raycastTarget = true;
 		dragElement.SetParent(this.gameObject.transform);
 		dragElement.gameObject.SetActive(false);
 
 		slot = InventoryUIController.Instance.slot;
-		isDropable = InventoryUIController.Instance.isDropable;
+		dropped = InventoryUIController.Instance.isDropable;
+
+		viewport.raycastTarget = true;
 
 		if (slot != null)
 		{
-			targetPosition = isDropable ? slot.transform.position : startPosition;
-			InventoryUIController.Instance.inventory.MoveElement(current, slot.index, pickable.Matrix);
-			current = slot.index;
+			targetPosition = dropped ? slot.transform.position : startPosition;
+			InventoryUIController.Instance.Inventory.MoveElement(current, slot.Matrix, pickable.MatrixSize);
+			current = slot.Matrix;
 		}
-		else isDropable = false;
+		else dropped = false;
 
-		viewport.raycastTarget = true;
 		InventoryUIController.Instance.element = null;
 	}
 
@@ -123,11 +128,10 @@ public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		float x = targetPosition.x + pickable.Matrix.x * SLOTSIZE * .5f;
-		float y = targetPosition.y - pickable.Matrix.y * SLOTSIZE * .5f + SLOTSIZE;
+		float x = targetPosition.x + pickable.MatrixSize.x * SLOTSIZE * .5f;
+		float y = targetPosition.y - pickable.MatrixSize.y * SLOTSIZE * .5f + SLOTSIZE;
 
-		this.transform.position = isDropable ? new Vector3(x, y, 0) : startPosition;
-
+		this.transform.position = dropped ? new Vector3(x, y, 0) : startPosition;
 		dragElement.transform.localPosition = Vector3.zero;
 	}
 
@@ -135,6 +139,6 @@ public class Element : MonoBehaviour, IDragHandler, IEndDragHandler
 	{
 		dragElement.GetComponent<RectTransform>().eulerAngles -= Vector3.forward * 90f;
 		pickable.RotateMatrix();
-		current = pickable.Matrix;
+		current = pickable.MatrixSize;
 	}
 }

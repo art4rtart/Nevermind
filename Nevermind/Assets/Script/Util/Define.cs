@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Define
-{    
+{
+    public const int SLOTSIZE = 64;
+
     public enum PickableType
     {
         Weapon,

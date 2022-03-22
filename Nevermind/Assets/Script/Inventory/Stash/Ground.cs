@@ -1,42 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
 public class Ground : Inventory
 {
-	const int SLOTSIZE = 64;
-
-	public Transform content;
-	public GameObject elementPrefab;  
-	
-	Vector3 startPosition;
-
+	[Header("Ground Inventory")]
 	public List<Pickable> ground = new();
 
+	[Header("Element")]
+	public Transform content;
 	public Transform slot;
+	public GameObject elementPrefab;  
+	
+	List<Vector2> currentMatrixs = new();
+	List<Element> elements = new();
 	List<Slot> slots = new();
-	int slotIndex = 0;
 
-	public List<Vector2> current = new();
-	public List<Element> elements = new();
+	Vector3 startPosition;
+
+	private void Awake()
+	{
+		if (content == null) Debug.Log("Content Transform should be assign");
+		if (elementPrefab == null) Debug.Log("Content Transform should be assign");
+	}
 
 	private void Start()
 	{
+		Init();
 		SetSlot();
 		ShowElement();
+		ShowMap();
 	}
 
 	protected override void Init()
 	{
 		SetMapSize();
-
 		startPosition = content.transform.position;
 	}
 
 	protected override void SetMapSize()
 	{
-		mapSize = new Vector2Int(10, 15);
-		map = new bool[mapSize.y, mapSize.x];
+		map = new bool[inventorySize.y, inventorySize.x];
 	}
 
 	protected override void ShowElement()
@@ -58,7 +63,7 @@ public class Ground : Inventory
 		int index = 0;
 		foreach(Element el in elements)
 		{
-			el.SetCurrentIndex(current[index]);
+			el.SetCurrentMatrix(currentMatrixs[index]);
 			index++;
 		}
 	}
@@ -67,14 +72,13 @@ public class Ground : Inventory
 	{
 		#region find empty index
 		bool foundEmptyIndex = false;
-
-		for (int y = _mapIndex.y; y < mapSize.y; y++)
+		for (int y = _mapIndex.y; y < inventorySize.y; y++)
 		{
-			for (int x = _mapIndex.x; x < mapSize.x; x++)
+			for (int x = _mapIndex.x; x < inventorySize.x; x++)
 			{
 				if (map[y, x] == false)
 				{
-					emptyIndex = new Vector2Int(x, y);
+					emptyMatrix = new Vector2Int(x, y);
 					foundEmptyIndex = true;
 					break;
 				}
@@ -87,19 +91,19 @@ public class Ground : Inventory
 		#region check collision
 		bool foundEmptySpace = true;
 
-		if (emptyIndex.x + _element.Matrix().x > mapSize.x)
+		if (emptyMatrix.x + _element.Matrix().x > inventorySize.x)
 		{
-			emptyIndex.x = 0;
-			emptyIndex.y++;
+			emptyMatrix.x = 0;
+			emptyMatrix.y++;
 
-			FindEmpty(_element, emptyIndex);
+			FindEmpty(_element, emptyMatrix);
 			return;
 		}
 
 		// check empty space
-		for (int y = (int)emptyIndex.y; y < (int)emptyIndex.y + _element.Matrix().y; y++)
+		for (int y = (int)emptyMatrix.y; y < (int)emptyMatrix.y + _element.Matrix().y; y++)
 		{
-			for (int x = (int)emptyIndex.x; x < (int)emptyIndex.x + _element.Matrix().x; x++)
+			for (int x = (int)emptyMatrix.x; x < (int)emptyMatrix.x + _element.Matrix().x; x++)
 			{
 				if (map[y, x] != false)
 				{
@@ -113,9 +117,9 @@ public class Ground : Inventory
 		// mark empty space
 		if (foundEmptySpace)
 		{
-			for (int y = (int)emptyIndex.y; y < emptyIndex.y + _element.Matrix().y; y++)
+			for (int y = (int)emptyMatrix.y; y < emptyMatrix.y + _element.Matrix().y; y++)
 			{
-				for (int x = (int)emptyIndex.x; x < emptyIndex.x + _element.Matrix().x; x++)
+				for (int x = (int)emptyMatrix.x; x < emptyMatrix.x + _element.Matrix().x; x++)
 				{
 					map[y, x] = true;
 				}
@@ -123,21 +127,21 @@ public class Ground : Inventory
 
 			SetElementSlot(_element);
 			
-			current.Add(emptyIndex);
+			currentMatrixs.Add(emptyMatrix);
 		}
 
 		else
 		{
-			emptyIndex.x++;
-			FindEmpty(_element, emptyIndex);
+			emptyMatrix.x++;
+			FindEmpty(_element, emptyMatrix);
 		}
 		#endregion
 	}
 
 	void SetElementPosition(Element _element, RectTransform _elementRect)
 	{
-		float x = emptyIndex.x * SLOTSIZE + _elementRect.sizeDelta.x * .5f * _element.Matrix().x;
-		float y = -((emptyIndex.y + _element.Matrix().y) * SLOTSIZE - _elementRect.sizeDelta.y * .5f * _element.Matrix().y);
+		float x = emptyMatrix.x * SLOTSIZE + _elementRect.sizeDelta.x * .5f * _element.Matrix().x;
+		float y = -((emptyMatrix.y + _element.Matrix().y) * SLOTSIZE - _elementRect.sizeDelta.y * .5f * _element.Matrix().y);
 
 		_elementRect.position = startPosition + new Vector3(x, y, 0);
 	}
@@ -147,17 +151,17 @@ public class Ground : Inventory
 		int x = 0, y = 0;
 		for (int i = 0; i < slot.childCount; i++)
 		{
-			slot.GetChild(i).GetComponent<Slot>().index = new Vector2(x, y);
+			slot.GetChild(i).GetComponent<Slot>().Matrix = new Vector2(x, y);
 			slots.Add(slot.GetChild(i).GetComponent<Slot>());
 
-			if (x == mapSize.x - 1) y = (y + 1) % mapSize.y;
-			x = (x + 1) % mapSize.x;
+			if (x == inventorySize.x - 1) y = (y + 1) % inventorySize.y;
+			x = (x + 1) % inventorySize.x;
 		}
 	}
 
 	void SetElementSlot(Element _element)
 	{
-		_element.slot = slots[emptyIndex.x + mapSize.x * emptyIndex.y];
-		_element.slot.isEmpty = false;
+		_element.Slot = slots[emptyMatrix.x + inventorySize.x * emptyMatrix.y];
+		_element.Slot.isEmpty = false;
 	}
 }

@@ -166,7 +166,7 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 3, y: 2}
+  matrixSize: {x: 1, y: 3}
   pickableMatrix: 0
 --- !u!54 &3324282
 Rigidbody:
@@ -3798,7 +3798,7 @@ GameObject:
   m_Component:
   - component: {fileID: 379423865}
   m_Layer: 5
-  m_Name: Content
+  m_Name: Contents
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4884,7 +4884,7 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 3, y: 2}
+  matrixSize: {x: 2, y: 1}
   pickableMatrix: 0
 --- !u!54 &564277673
 Rigidbody:
@@ -5798,7 +5798,7 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 2, y: 2}
+  matrixSize: {x: 3, y: 2}
   pickableMatrix: 0
 --- !u!54 &680722236
 Rigidbody:
@@ -8831,7 +8831,7 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 3, y: 2}
+  matrixSize: {x: 1, y: 1}
   pickableMatrix: 0
 --- !u!54 &1028736874
 Rigidbody:
@@ -11233,7 +11233,7 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 4, y: 1}
+  matrixSize: {x: 1, y: 1}
   pickableMatrix: 0
 --- !u!65 &1280577265
 BoxCollider:
@@ -11936,9 +11936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d78a5cbcf843641bee4542a7d2b2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSize: {x: 10, y: 15}
-  content: {fileID: 379423865}
-  elementPrefab: {fileID: 8382368941685432716, guid: 05c5ba0843587754a85ac02e70ac05df, type: 3}
+  inventorySize: {x: 10, y: 15}
   ground:
   - {fileID: 1280577264}
   - {fileID: 1850602431}
@@ -11946,9 +11944,9 @@ MonoBehaviour:
   - {fileID: 1439726641}
   - {fileID: 680722235}
   - {fileID: 1028736873}
+  content: {fileID: 379423865}
   slot: {fileID: 1568290011}
-  current: []
-  elements: []
+  elementPrefab: {fileID: 8382368941685432716, guid: 05c5ba0843587754a85ac02e70ac05df, type: 3}
 --- !u!1001 &1431750734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12130,7 +12128,7 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 1, y: 4}
+  matrixSize: {x: 2, y: 2}
   pickableMatrix: 0
 --- !u!54 &1439726642
 Rigidbody:
@@ -12583,35 +12581,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16220db9bb495bb499fe477c5833f198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapSize: {x: 0, y: 0}
+  inventorySize: {x: 10, y: 10}
   bag: []
   maxSpace: 50
   currentSpace: 0
-  pickables:
-  - {fileID: 1280577264}
-  - {fileID: 1850602431}
-  - {fileID: 1879044927}
-  - {fileID: 1439726641}
-  - {fileID: 680722235}
-  - {fileID: 1028736873}
-  - {fileID: 564277672}
-  - {fileID: 3324281}
-  - {fileID: 1280577264}
-  - {fileID: 1850602431}
-  - {fileID: 1879044927}
-  - {fileID: 1439726641}
-  - {fileID: 680722235}
-  - {fileID: 1028736873}
-  - {fileID: 564277672}
-  - {fileID: 3324281}
-  - {fileID: 1280577264}
-  - {fileID: 1850602431}
-  - {fileID: 1879044927}
-  - {fileID: 1439726641}
-  - {fileID: 680722235}
-  - {fileID: 1028736873}
-  - {fileID: 564277672}
-  - {fileID: 3324281}
+  pickables: []
 --- !u!1001 &1470241449
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16197,7 +16171,7 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 1, y: 2}
+  matrixSize: {x: 2, y: 2}
   pickableMatrix: 0
 --- !u!65 &1850602432
 BoxCollider:
@@ -16487,7 +16461,7 @@ MonoBehaviour:
   sellAmount: 0
   spacePerAmount: 1
   pickableState: 0
-  matrix: {x: 1, y: 3}
+  matrixSize: {x: 2, y: 1}
   pickableMatrix: 0
 --- !u!65 &1879044928
 BoxCollider:

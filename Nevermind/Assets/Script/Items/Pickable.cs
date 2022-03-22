@@ -23,8 +23,8 @@ public abstract class Pickable : MonoBehaviour
 	[SerializeField] protected int spacePerAmount;
 
 	[SerializeField] protected PickableState pickableState;
-	public Vector2 Matrix { get { return matrix; } set { matrix = value; } }
-	[SerializeField] protected Vector2 matrix;
+	public Vector2 MatrixSize { get { return matrixSize; } set { matrixSize = value; } }
+	[SerializeField] protected Vector2 matrixSize;
 
 	public PickableMatrix PickableMatrix { get { return pickableMatrix; } }
 	[SerializeField] protected PickableMatrix pickableMatrix;
@@ -34,24 +34,22 @@ public abstract class Pickable : MonoBehaviour
 	public abstract void Use();
 	public abstract void Sell();
 
-	// please remind this methods...
-	public virtual void InitMatrix() { }
-
 	public virtual void SetMatrix(int x, int y) 
 	{
-		matrix = new Vector2Int(x, y);
+		if(x + y ==0) matrixSize = new Vector2(1, 1);
+		matrixSize = new Vector2Int(x, y);
 
 		if(x == y)
 		{
 			pickableMatrix = PickableMatrix.Square;
 		}
-		else if (x < y)
-		{
-			pickableMatrix = PickableMatrix.Vertical;
-		}
 		else if (x > y)
 		{
 			pickableMatrix = PickableMatrix.Horizontal;
+		}
+		else if (x < y)
+		{
+			pickableMatrix = PickableMatrix.Vertical;
 		}
 	}
 
@@ -59,12 +57,12 @@ public abstract class Pickable : MonoBehaviour
 	{
 		int value;
 
-		value = (int)matrix.x;
-		matrix.x = matrix.y;
-		matrix.y = value;
+		value = (int)matrixSize.x;
+		matrixSize.x = matrixSize.y;
+		matrixSize.y = value;
 
-		if (matrix.x - matrix.y < 0) pickableMatrix = PickableMatrix.Vertical;
-		else if (matrix.x - matrix.y > 0) pickableMatrix = PickableMatrix.Horizontal;
+		if (matrixSize.x - matrixSize.y < 0) pickableMatrix = PickableMatrix.Vertical;
+		else if (matrixSize.x - matrixSize.y > 0) pickableMatrix = PickableMatrix.Horizontal;
 	}
 
 	private void Awake()
@@ -78,7 +76,7 @@ public abstract class Pickable : MonoBehaviour
 		this.gameObject.layer = LayerMask.NameToLayer("Item");
 		this.gameObject.tag = "Item";
 
-		SetMatrix((int)matrix.x, (int)matrix.y);
+		SetMatrix((int)matrixSize.x, (int)matrixSize.y);
 	}
 
 	public int SpaceAmount()
